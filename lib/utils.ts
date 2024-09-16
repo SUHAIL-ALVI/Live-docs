@@ -1,20 +1,14 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-// Function to merge and deduplicate Tailwind CSS class names
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// Function to parse and stringify JSON safely
-export const parseStringify = (value: unknown): unknown =>
+export const parseStringify = (value: unknown) =>
   JSON.parse(JSON.stringify(value));
 
-// Define the UserType type (assuming it is a string literal type)
-type UserType = "creator" | "editor" | "viewer";
-
-// Function to get access types based on user type
-export const getAccessType = (userType: UserType): string[] => {
+export const getAccessType = (userType: UserType) => {
   switch (userType) {
     case "creator":
       return ["room:write"];
@@ -27,7 +21,6 @@ export const getAccessType = (userType: UserType): string[] => {
   }
 };
 
-// Function to convert timestamps to human-readable format
 export const dateConverter = (timestamp: string): string => {
   const timestampNum = Math.round(new Date(timestamp).getTime() / 1000);
   const date: Date = new Date(timestampNum * 1000);
@@ -54,10 +47,10 @@ export const dateConverter = (timestamp: string): string => {
 };
 
 // Function to generate a random color in hex format, excluding specified colors
-export function getRandomColor(): string {
+export function getRandomColor() {
   const avoidColors = ["#000000", "#FFFFFF", "#8B4513"]; // Black, White, Brown in hex format
 
-  let randomColor: string;
+  let randomColor;
   do {
     // Generate random RGB values
     const r = Math.floor(Math.random() * 256); // Random number between 0-255
@@ -65,16 +58,13 @@ export function getRandomColor(): string {
     const b = Math.floor(Math.random() * 256);
 
     // Convert RGB to hex format
-    randomColor = `#${r.toString(16).padStart(2, "0")}${g
-      .toString(16)
-      .padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+    randomColor = `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`;
   } while (avoidColors.includes(randomColor));
 
   return randomColor;
 }
 
-// Array of bright colors
-export const brightColors: string[] = [
+export const brightColors = [
   "#2E8B57", // Darker Neon Green
   "#FF6EB4", // Darker Neon Pink
   "#00CDCD", // Darker Cyan
@@ -96,8 +86,7 @@ export const brightColors: string[] = [
   "#FF6347", // Darker Neon Vermilion
 ];
 
-// Function to get a user color based on user ID
-export function getUserColor(userId: string): string {
+export function getUserColor(userId: string) {
   let sum = 0;
   for (let i = 0; i < userId.length; i++) {
     sum += userId.charCodeAt(i);

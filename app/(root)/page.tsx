@@ -1,35 +1,21 @@
-import { currentUser } from "@clerk/nextjs/server";
-import { getDocuments } from "@/lib/actions/room.actions";
-import { dateConverter } from "@/lib/utils";
 import AddDocumentBtn from "@/components/AddDocumentBtn";
 import { DeleteModal } from "@/components/DeleteModal";
 import Header from "@/components/Header";
 import Notifications from "@/components/Notifications";
+import { Button } from "@/components/ui/button";
+import { getDocuments } from "@/lib/actions/room.actions";
+import { dateConverter } from "@/lib/utils";
+import { SignedIn, UserButton } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { SignedIn, UserButton } from "@clerk/nextjs";
-
-// Define types for documents
-interface DocumentMetadata {
-  title: string;
-}
-
-interface Document {
-  id: string;
-  metadata: DocumentMetadata;
-  createdAt: string; // or Date if it's a Date object
-}
-
-interface GetDocumentsResponse {
-  data: Document[];
-}
 
 const Home = async () => {
   const clerkUser = await currentUser();
   if (!clerkUser) redirect("/sign-in");
 
-  const roomDocuments: GetDocumentsResponse = await getDocuments(
+  const roomDocuments = await getDocuments(
     clerkUser.emailAddresses[0].emailAddress
   );
 
@@ -54,7 +40,7 @@ const Home = async () => {
             />
           </div>
           <ul className="document-ul">
-            {roomDocuments.data.map(({ id, metadata, createdAt }: Document) => (
+            {roomDocuments.data.map(({ id, metadata, createdAt }: any) => (
               <li key={id} className="document-list-item">
                 <Link
                   href={`/documents/${id}`}
