@@ -2,7 +2,7 @@ import AddDocumentBtn from "@/components/AddDocumentBtn";
 import { DeleteModal } from "@/components/DeleteModal";
 import Header from "@/components/Header";
 import Notifications from "@/components/Notifications";
-import { Button } from "@/components/ui/button";
+
 import { getDocuments } from "@/lib/actions/room.actions";
 import { dateConverter } from "@/lib/utils";
 import { SignedIn, UserButton } from "@clerk/nextjs";
@@ -11,10 +11,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+// Define the Document type here
+interface Document {
+  id: string;
+  metadata: {
+    title: string;
+  };
+  createdAt: string; // Use Date if it's a Date object
+}
+
 const Home = async () => {
   const clerkUser = await currentUser();
   if (!clerkUser) redirect("/sign-in");
 
+  // Assume getDocuments returns a data structure with a `data` field that is an array of Document
   const roomDocuments = await getDocuments(
     clerkUser.emailAddresses[0].emailAddress
   );
@@ -40,7 +50,7 @@ const Home = async () => {
             />
           </div>
           <ul className="document-ul">
-            {roomDocuments.data.map(({ id, metadata, createdAt }: any) => (
+            {roomDocuments.data.map(({ id, metadata, createdAt }: Document) => (
               <li key={id} className="document-list-item">
                 <Link
                   href={`/documents/${id}`}
