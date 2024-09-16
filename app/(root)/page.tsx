@@ -11,20 +11,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-// Define the Document type here
-interface Document {
+type Document = {
   id: string;
   metadata: {
     title: string;
   };
-  createdAt: string; // Use Date if it's a Date object
-}
+  createdAt: string; // Adjust the type based on the actual format
+};
 
 const Home = async () => {
   const clerkUser = await currentUser();
   if (!clerkUser) redirect("/sign-in");
 
-  // Assume getDocuments returns a data structure with a `data` field that is an array of Document
   const roomDocuments = await getDocuments(
     clerkUser.emailAddresses[0].emailAddress
   );
